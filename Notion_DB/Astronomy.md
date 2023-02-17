@@ -284,3 +284,5 @@ _No lights you could see ~3000 stars_
 5. Why don't professional astronomers care about magnification?
    1. Resolution is what it is, blowing up a blurry picture doesn't make it any better
    2. You can only pick up so much light.
+6. True or False? Astronauts are weightless in space because there is no gravity there.
+   1. Yes, you don't weigh anything, but you still have mass.

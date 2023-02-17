@@ -1,14 +1,17 @@
 """This is the logic for ingesting Notion data into LangChain."""
-from pathlib import Path
-from langchain.text_splitter import CharacterTextSplitter
-import faiss
-from langchain.vectorstores import FAISS
-from langchain.embeddings import OpenAIEmbeddings
 import pickle
+import sys
+from pathlib import Path
 
+import faiss
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.vectorstores import FAISS
+
+spaceId = sys.argv[1];
 
 # Here we load in the data in the format that Notion exports it in.
-ps = list(Path("Notion_DB/").glob("**/*.md"))
+ps = list(Path(f'WikiStore/{spaceId}/').glob("**/*.md"))
 
 data = []
 sources = []
@@ -27,10 +30,9 @@ for i, d in enumerate(data):
     docs.extend(splits)
     metadatas.extend([{"source": sources[i]}] * len(splits))
 
-
 # Here we create a vector store from the documents and save it to disk.
 store = FAISS.from_texts(docs, OpenAIEmbeddings(), metadatas=metadatas)
-faiss.write_index(store.index, "docs.index")
+faiss.write_index(store.index, f'faiss_store_{spaceId}.index')
 store.index = None
-with open("faiss_store.pkl", "wb") as f:
+with open(f'faiss_store_{spaceId}.pkl', "wb") as f:
     pickle.dump(store, f)
